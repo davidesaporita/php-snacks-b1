@@ -57,7 +57,7 @@
         $pipe = "|";
         $score_separator = "-";
 
-        $results = ;
+        $html;
 
     ?>
 </body>
