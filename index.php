@@ -12,9 +12,6 @@
      * 2. che mail contenga un punto e una chiocciola
      * 3. e che age sia un numero.Se tutto è ok stampare “Accesso riuscito”, altrimenti “Accesso negato”
      * 
-     *     * 
-     * 
-     * 
      */
 
     
@@ -22,6 +19,8 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
+
+    // PHP Snack 1 
     $matches = [
         [
             'home_team' => 'Viola Reggio Calabria',
@@ -62,6 +61,25 @@
                 .$matches[$i]['away_score']
                 ."</li>";
     }
+    // PHP Snack 1 - Ends 
+
+    /***********************************************/
+    /***********************************************/
+
+    // PHP Snack 2
+    $data = $_GET;
+
+    if( ! empty($data) ) {
+        if( ! ( strlen($data['name']) <= 3 || strpos($data['mail'], '@') == false || strpos($data['mail'], '.') == false || is_numeric($data['age']) == false ) ) {
+            echo "Tutto ok, man";
+        } else {
+            echo "Accesso negato";
+        }
+    } else {
+        echo "Non ci sono dati nella query";
+    }
+
+    // PHP Snack 2 - Ends
 ?>
 
 <!DOCTYPE html>
