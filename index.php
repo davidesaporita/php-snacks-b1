@@ -48,10 +48,10 @@
         ]
     ];
 
-    $html = "";
+    $html_snack1 = "";
 
     for( $i = 0; $i < count($matches); $i++ ) {
-        $html .= "<li>"
+        $html_snack1 .= "<li>"
                 .$matches[$i]['home_team']
                 .' - '
                 .$matches[$i]['away_team']
@@ -68,17 +68,48 @@
 
     // PHP Snack 2
     $data = $_GET;
+    $html_snack2 = "";
+    $empty_error = "";
+    $data_error = "";
 
-    if( ! empty($data) ) {
-        if( ! ( strlen($data['name']) <= 3 || strpos($data['mail'], '@') == false || strpos($data['mail'], '.') == false || is_numeric($data['age']) == false ) ) {
-            echo "Tutto ok, man";
+    if (!empty($data)) {
+        !empty($data['name'])  ?  $name = $data['name'] : $empty_error .= "name ";
+        !empty($data['mail'])  ?  $mail = $data['mail'] : $empty_error .= "mail ";
+        !empty($data['age'])   ?  $age  = $data['age']  : $empty_error .= "age ";
+        if (strlen($empty_error) == 0) {
+            strlen($name) < 3  ? $data_error .= "Name field wrong<br>" : null;
+            !is_numeric($age)  ? $data_error .= "Age field wrong<br>"  : null;
+            !check_mail($mail) ? $data_error .= "Mail field wrong<br>" : null;
+
+            $output_1 = "All fields inserted";
+
+            if (strlen($data_error) == 0)  {
+                $output_2 = "Fields correctly inserted";
+            } else {
+                $output_2 = "Accesso negato:<br>$data_error";
+            }
         } else {
-            echo "Accesso negato";
+            $output_1 = "Field $empty_error empty";
         }
     } else {
-        echo "Non ci sono dati nella query";
+        $output_1 =  "Non ci sono dati nella query";
     }
 
+    function check_mail($mail) {
+        if(strpos($mail, '@') == true && strpos($mail, '.') == true && strpos($mail, '@') < strpos($mail, '.')) {
+            $mail_parts = explode("@", $mail);
+            if(strlen($mail_parts[0]) < 3 || strlen($mail_parts[1]) < 5) {
+                return false;
+            } else {
+                $domain_ext = explode(".", $mail_parts[1]);
+                $extension_list = ["it","com","net","co.uk","fr","eu","biz","us","de"];
+                count($domain_ext) >= 3 ? $extension = $domain_ext[1] . ".$domain_ext[2]" : $extension = $domain_ext[1];
+                return in_array($extension, $extension_list);
+            }
+        } else {
+            return false;
+        }
+    }
     // PHP Snack 2 - Ends
 ?>
 
@@ -93,11 +124,14 @@
     <main>
         <div id="php-snack-1">
             <h1>Php Snack 1</h1>
-            <ul><?php echo $html; ?></ul>
+            <ul><?php echo $html_snack1; ?></ul>
         </div>
         <div id="php-snack-2">
             <h1>Php Snack 2</h1>
-            
+            <ul>
+                <li><?php echo $output_1; ?></li>
+                <li><?php echo $output_2; ?></li>
+            </ul>
         </div>
     </main>
 </body>
